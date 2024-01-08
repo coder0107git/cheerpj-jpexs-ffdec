@@ -1,6 +1,307 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [20.1.0] - 2023-12-30
+### Added
+- Configurable tab size (formatting must be set to use tabs) - default matches indent size of 3
+- [#2100] Copy/paste frames (same SWF only)
+- Updated portugese-brasil translation
+- AS3 Debugging - export/import ByteArray variable data
+- [#2123] FLA export - show some progress info
+- Label that flex compiler is used (when it's enabled in settings)
+- [#2119] Option to export assets with names like their assigned classes via SymbolClass, without character id
+- [#2119] Bulk imported assets can also match filenames based on assigned classname, not just character id prefix
+- Debugger shows (logs) unhandled exceptions
+- [#2129] MEMORY and STACK_SIZE parameters now can be set via external variables FFDEC_MEMORY, FFDEC_STACK_SIZE
+- Saving Harman encrypted SWFs
+- Editing encrypted flag on header panel
+- `-encrypt` command on CLI for Harman encryption
+- Apply unpacker menu on binary data
+- Harman unpacker for binary data
+- Multilevel binary data unpacking is possible
+- [#2131] AS1/2 Debugger - show _root variable
+- [#2124] Copy tags to other SWFs and replace same classes / export names
+- Remembering breakpoints
+- [#2131] Breakpoint list dialog
+- ExportAssets tag - show first item as description in the tree when there is only single item
+- [#2134] FLA Export - split main timeline into scenes when DefineSceneAndFrameLabelData tag is present
+- [#2132] Show and export streamed sound (SoundStreamHead/SoundStreamBlock) in frame ranges (+ take scenes into account)
+- FLA export - show export time
+- [#2138] Morphshapes - detect classic easing
+- FLA export - option to disable fixing of shapes
+- Scenes folder with (readonly) display of scene frames
+
+### Fixed
+- [#2021], [#2000] Caret position in editors when using tabs and / or unicode
+- [#2021] Indent continuation when using tabs
+- [#2116] DefineEditText display - correct getting fonts
+- [#2116] DefineEditText display - apostroph decoding
+- [#2116] Apply colortransform after filters
+- [#2116] Limit maximum number of box blur pixels
+- [#2122] `-header` command did not support negative integers for displayrect
+- AS3 direct editation - namespaces were initialized in class initializers
+- Debugging - do not invoke getter when there is none - avoid freezing
+- Debugging - properly getting variable value through getter
+- [#2123] FLA export - IndexOutOfBounds in shape fixer
+- [#2123] FLA export - morphshapes fixer
+- [#2111] AS3 direct editation - access class in class initializer
+- [#2111] Flex AS3 editation - use SWF dependencies defined in GUI
+- SWF dependencies label was not updated on startup
+- [#2127] Wrong parameter order in AS1/2 P-code Action GetURL2 documentation
+- [#2025], [#2078], [#2053] Problems starting the app on Windows when the username has unicode characters
+- Incorrect debugger line numbers when "Open loaded while playing" is enabled
+- AS3 debugger - Slow injecting debug info - now faster
+- AS3 debugger - obfuscated classes debugging
+- Delayed open loaded SWFs while playing
+- AS3 Direct editation - script initializer for main document class
+- AS3 Debugging - activation object was not visible in locals
+- Linenumbers are visible even if debug markers are used
+- Marker of stack frames not properly cleared
+- Retain AS3 script selection in the tree after its editation and saving whole SWF
+- [#2131] AS1/2 Debugger - Breakpoint handling - incorrect script names
+- [#2131] Debugger - Correct walking variables tree
+- [#2131] Debugger - Breakpoints can be added while SWF is running (not just on pause)
+- AS3 Direct editation - types on instance variable values not properly resolved
+- AS1/2 Debugger - script was cleared on stop button
+- AS1/2 Vanishing source code in some cases
+- AS1/2 Debugger tooltips exception
+- [#2131] UseOutline flag for DefineEditText
+- Wordrapping long words in DefineEditText
+- [#2133] Linux/Mac - ffdec.sh not correctly parsing java build number on javas without it
+- [#2135] FLA Export - framescripts handling when addFrameScript uses Multinames instead of QNames
+- [#1194] FLA Export - stream sound export
+- [#2136] FLA Export - optimized Shape fixer speed, repeated shape on timeline not exported twice
+- [#2139] FLA Export - labels layer not counted as layer index causing masked layer parentindex wrong
+- [#2138] Nested clipping (masks) display
+- [#2138], [#2156] FLA Export - Missing morphshapes (incorrect holes calculation)
+- [#2138] FLA Export - Mask layer was visible when did not contain a masked layer
+- FLA Export - frame numbering problem
+- [#2145] FLA Export - missing frames, cliping layers order, nullpointer, empty sound layers
+- [#2142] XML Export - string values containing only spaces
+- AS3 - Nullpointer in MethodBody when no ABC set
+- [#2148] AS2 Uninitialized class fields detector
+- [#2148] AS1/2 callmethod by register value
+- [#2148] AS2 Do not return undefined for setters
+- [#2143] FLA Export / Sound playback - taking MP3 initial latency into account
+- [#2153] FLA Export - sound streams were limited to first stream block
+- [#2163] FLA Export - maintain sound export settings for streams
+- [#2162] Debugger - ignore (warn) invalid jumps when injecting debug info
+- AS3 - extra newlines on methods which use activation
+- [#2162] AS3 switch inside foreach
+- [#2162] AS3 try inside foreach
+- [#2152] FLA Export - wrong nonlibrary shapes detection
+- [#2147] Display of empty video
+- Saving SWFs opened by "Open loaded while playing" feature
+
+### Changed
+- [#2120] Exported assets no longer take names from assigned classes if there is more than 1 assigned class
+- [#2127] AS1/2 P-code Action GetURL2 switched parameters back - correct order is (loadVariablesFlag, loadTargetFlag, sendVarsMethod),
+ code from 19.1.x to 20.0.0 is still accepted
+- Wrong unicode escape `{invalid_utf8:xxx}` changed to `{invalid_utf8=xxx}` for compatibility with file names
+
+## [20.0.0] - 2023-11-05
+### Added
+- [#1130], [#1220] Remembering last used screen (monitor), 
+ opening dialogs on same screen as the main window,
+ do not restore window size to larger value that actual screen size
+- [#1717] AS1/2/3 Option to hide P-code panel
+- [#2005] Export files to directories by bundle names on multiple bundle (zips, etc.) selection
+- ActionScript Debugger - Call stack frames switching - view variables around call stack
+- ActionScript Debugger - Highlight lines of callstack
+- [#2105] GFX - Basic tag info
+- Context menu items to create new tags (shape, morphshape, sprite, image, movie, sound, binaryData) from files
+  and using font embed dialog for fonts
+- Replacing morphshapes (either from previously exported animated SVG or from two shape files)
+- SVG Export - stroke-bitmapId, fill-bitmapId attribute
+- Morphshape SVG Export - bitmap fill strokes
+- SVG Export/Import - retain bitmap fill smoothed attribute
+- Export Morphshape as start and end shape (SVG, PNG, BMP)
+- Directory selection dialog in directory configs in advanced settings
+- Status bar with info about edges on walking shaperecords
+- [#1799] Text tags editor has new parameter `[space xxx]` specifying exact letter
+ advance value (add to the font advance + calculated letterspacing)
+- DefineEditText display - letterspacing, kerning, indent, relative font size
+- FLA export - DefineEditText autokern attribute
+
+### Fixed
+- [#1306], [#1768] Maximizing window on other than main monitor
+- AS3 Cast exception when used tree filter and then direct editing
+- [#2013] AS3 Multiname renaming - closing the script when renaming the class, nullpointer exception
+- GFX - FontTextureInfo tag reading
+- GFX - Fonts with stripped shapes
+- [#2104] Empty texts import
+- Centered start playing triangle (Playing on demand)
+- miterLimitFactor is FIXED8 value in MORPHLINESTYLE2
+- Display of morphshape end shape to be exactly at 65535 ratio
+- SVG import - duplicated image on bitmap fill style
+- Generic tag editor - morphshape fill - show bitmapId for repeating bitmap fill, gradient matrix for focal gradient
+- Morphshape SVG export - focalPoint animation
+- Do not display lines with zero width
+- Not updating Morphshape end bounds
+- SVG import - linear gradients
+- SVG import - Do not use fill winding nonzero when only stroking
+- Morphshape SVG export - closing the stroke
+- [#2031] FLA export - morphshapes with duplicated strokes, timelines with multiple shape tweens
+- [#1866] FLA export - multilevel clipping handling
+- [#1866] FLA export - morphshape rounding fix
+- [#1866] FLA export - multiple usage of morphshapes
+- [#503], [#1011], [#1257], [#1902], [#1903], [#2048] FLA export - shapes with overlapping edges
+- [#2108] Cannot change text when ShiftJIS flag is set on font
+- [#2074], [#2074] Use mxmlc.bat file when exe not available for Flex SDK compilation
+- FLA export - DefineEditText - allow negative letterspacing
+- [#2112] GFX - new image types in DefineExternalImage
+- [#1193] FLA export - DefineEditText position and size
+- FLA export - allow float frame rate
+- FLA export - font export - allow dot as character
+- AS3 Debugging P-code inside nested functions
+- AS3 Debugging - show (and click through) proper call stack
+
+### Changed
+- Basic tag info panel always visible even when nothing to display (to avoid flickering)
+- SVG export - attributes like data-characterId and data-characterName moved under `ffdec:` namespace
+- [#802] - FLA export - calculating letterspacing on text with fonts without layout is now optional 
+ and turned off by default
+- [#2113] Commandline `-importScript` command aborts import on first error,
+ can be changed with `-onerror ignore` argument
+
+## [19.1.2] - 2023-10-16
+### Fixed
+- [#2099] Smart number formatting always on
+
+## [19.1.1] - 2023-10-16
+### Fixed
+- Linux/Mac script (ffdec.sh) incorrect quotes avoiding FFDec to start
+
+## [19.1.0] - 2023-10-16
+### Added
+- [#2090] Support for Mochicrypt packed binarydata tags - loading SWF as subtree
+- [#2079] Replace DefineSprite with GIF, Bulk import sprites from GIFs, also from commandline
+- [#116] Show invalid utf-8 bytes in Strings as `{invalid_utf8:xxx}`
+- [#2097] Commandline command `-header` to modify SWF header values
+- SVG Frames export - blend modes
+- SVG Frames export - filter
+- SVG Shapes export - non-scaling strokes
+- SVG Shapes import - non-scaling strokes
+- Support for DefineShape4 nonzero winding rule - display, svg (import, export), canvas export
+- Generic tag editor - MORPHLINESTYLE2 has enum selection for cap and join style
+- Generic tag editor - Default values for filters
+- AS1/2 P-code actions inline documentation
+- P-code hilight currently selected instruction argument in the documentation (both AS1/2 and AS3)
+- [#2098] Shape points editation, transform - Protection against saving too large edges/rects
+
+### Fixed
+- Close action on SWF inside DefineBinaryData
+- [#2093] AS3 Unnecessary use of fully qualified names for classes in same package
+- [#1678] Shapes - Miter clip join style
+- [#2094] AS3 do not show body trait variables as FQN
+- [#2094] AS3 Missing use namespace
+- [#2094] AS3 missing star type on var and const
+- [#2094] AS3 Getting register names from debug info - do not allow assigning `_locX_` name to other register than X
+- [#2094] Embed font name taken from the fontTag, not DefineFontName
+- AS3 Simplify expressions - Do not convert this to {} when coerced
+- AS3 incorrect private modifier on internal namespaced traits of private class inside script
+- [#2095] AS3 Changing script when debugging
+- [#223] AS2 Detecting uninitialized class fields
+- Embed tag not properly escaped on obfuscated files
+- [#116] AS3 Cyclic typenames
+- [#116] AS3 Do not parse DoABC tags inside sprites
+- [#116] Cyclic buttons
+- AS1/2 new keyword on empty method name
+- AS2 getters and setters decoding
+- [#116] ????push at the end of switch branches
+- Convolution matrix filter display and editing
+- Generic tag editor - Disallow add before/after or remove on parent field with indices
+- Calculating fillBits, lineBits on SHAPE structure (storing morphshapes, fonts)
+- Generic tag editor - COLORMATRIXFILTER has fixed number of float values
+- Filters display - ymin value
+- Box blur display rounding errors
+- Generic tag editor - display of color values in arrays (filters, etc.)
+- Generic tag editor - display of array brackets
+- Generic tag editor - GRADIENT filters fields
+- [#2099] Smart number formatting precedence
+- AS3 Direct editation - Cannot save code after switching deobfuscation
+
+### Changed
+- AS1/2 P-code action parameters are now separated by commas, code without commas is still accepted
+- AS1/2 P-code Action GetURL2 has switched parameters - sendVarsMethod is first, older code is still accepted
+
+## [19.0.0] - 2023-10-01
+### Added
+- [#1449] Updated Turkish translation
+- [#2070] SWF to XML format has new meta fields describing XML export major/minor version
+(major = uncompatible change)
+- [#2070] forceWriteAsLong Tag internal attribute is now visible and editable
+ (including XML export), allows decide whether to write length in tag header as long
+- [#2073] Editing of frame count in SWF header (with warning that it won't update ShowFrame count)
+- Show font AS linkage class in its name in the tree (besides font name)
+- [#2057] Show all assigned AS linkage classes in the item name (instead just one)
+- Exporting ByteArrayRange in the raw editor with the Export button
+- Export DefineFont4 to OpenType CFF file
+- AS3 - Show `Embed` tag over asset classes (readonly)
+- AS3 - Checkbox for exporting assets embedded using `Embed` (-exportembed in commandline)
+- FLA export - AS3 - Using `Embed` tag for DefineBinaryData, images not extending BitmapData
+- [#2066] AS3 Support for api-versioned SWFs
+- AS3 compound scripts (scripts containing multiple external definitions like compiled C code, etc.)
+ have special node per script (script_0, script_1, ...) which contains included classes and script initializer
+- Show "Renaming identifiers" status on file opening with auto rename identifiers on
+- [#2010] word wrapping in the translation tool
+- ABC Explorer tool
+- FLA export - remember last selected FLA version/compression
+- AS3 Natural sorting of packages and script
+
+### Fixed
+- [#2043] StartSound2 tag handling
+- [PR176] - slow loading of allowed charsets - now lazy loaded
+- [PR178] - infinite recursion when getter/setter calls same property of superclass
+- [#2070] Handling newlines and tabs in string values inside SWF to XML export
+- [#2017], [PR179] Classes in same package displayed as fully qualified
+- [PR177] AS3 direct editation - Vector literal
+- [#2052], [#2058] Adding new script placing class to incorrect DoABC tag
+- [#2072] AS3 direct editation - incorrectly using trait names of top level classes
+- [#2029] Simplify expressions stripping getlex and also ignoring some types of expressions
+- [#2052] Detection of switches based on notequal operator
+- [#2073] Recalculating frameCount field in SWF header and DefineSprite after deleting frame
+- Handling currently selected tags when using folder preview selection (Not working Replace button, etc.)
+- FLA export - Sprites which do not end with ShowFrame tag
+- [PR109] FLA export - large font size of DefineEditText
+- [PR110] FLA export - image instances
+- FLA export - missing AS linkage class for fonts
+- [#2077] Switch detection problems producing ????goto
+- [#2077] AS3 recursion of deleting method with newfunction instruction
+- [#2077] AS3 direct editation - incorrect slot names
+- [#2077] AS3 direct editation - switch statement missing offset
+- [#2077] AS3 allow star string as property name (XML access)
+- [#2077] AS3 try..catch parts outside block
+- AS3 try..catch inside loop unneccessary continue
+- [#2077] AS3 colliding types in current package with trait names
+- NullPointer on reload / uncache
+- [#2076] Auto rename identifiers infinite loop caused by renaming in playerglobal library
+- Not working "Show in Projector" button for DefineFont4 (hide)
+- Proper error message when there is no room for new characters in the font (DefineFont1)
+- Synchronization problems when adding characters to the font vs its display
+- [#2086] AS3 direct editation - Correct class order (instanceinfo,classinfo) respecting extends/implements
+- [#2086] AS3 direct editation - not deleting old nested methods when they have multiple usages
+- [#2009] Missing images in MacOs icon
+- AS3 Initialization of var in script initializer
+- AS3 Nullpointer on getting multiname which is out of bounds
+- Exceptions on cancelling file loading
+- Switching between openables on session load and on view type change
+- Float/Float4 ABC format support
+- AS3 Hilighting (go to) scripts when script has obfuscated name
+
+### Changed
+- [#2070] String values inside SWF to XML export are backslash escaped 
+to properly handle newlines and tabs. Older versions of FFDec can read this
+new format wrong and corrupt SWFs.
+Major version of SWF to XML export changed to 2.
+- AS3 Compound scripts (scripts containing multiple external definitions like compiled C code, etc.)
+ cannot be directly edited or imported (due to problems with script initializers)
+- [#2022] - AS3 - Make script initializer always visible and available instead of config
+- [#1355] Import panel moved to separate tab
+
+### Removed
+- Removed AS3 Constants list (tab on navigator) in favor of new ABC Explorer
+
 ## [18.5.0] - 2023-06-25
 ### Added
 - [#1998] Setting for maximum number of items in the cache - allows less memory consumption (Defaults to 500 per cache)
@@ -13,7 +314,7 @@ All notable changes to this project will be documented in this file.
 - [#2008] AS3 P-code editing optional Double value when it has no fractional part
 - AS3 P-code editation - zero line number on error
 - [#2007] AS3 renaming invalid identifiers - not refreshing AbcIndex afterwards
-- AS1/2 - loadMovie / loadVariables / loadMovieNum / loadVariablesNum editation incorrectly setting GET as method
+- [PR173] AS1/2 - loadMovie / loadVariables / loadMovieNum / loadVariablesNum editation incorrectly setting GET as method
 
 ## [18.4.1] - 2023-04-05
 ### Fixed
@@ -387,7 +688,7 @@ All notable changes to this project will be documented in this file.
 
 ## [17.0.1] - 2022-11-21
 ### Added
-- PR119 Option to set scale factor in advanced settings (Set it to 2.0 on Mac retina displays)
+- [PR119] Option to set scale factor in advanced settings (Set it to 2.0 on Mac retina displays)
 
 ### Fixed
 - [#1880] JPEG Fixer
@@ -503,7 +804,7 @@ All notable changes to this project will be documented in this file.
 - [#1460] Bulk importing images
 - Bulk importing scripts/text/images added to SWF context menu
 - [#1465] Configuration option to disable SWF preview autoplay
-- Setting for disabling expanding first level of tree nodes on SWF load
+- [PR144] Setting for disabling expanding first level of tree nodes on SWF load
 
 ### Fixed
 - FLA export printing xxx string on exporting character with id 320
@@ -608,14 +909,14 @@ All notable changes to this project will be documented in this file.
 ## [16.0.0] - 2022-10-30
 ### Added
 - Replace characters references
-- Replace commandline action allows to load replacements list from a textfile
-- SymbolClass export from commandline
-- data-characterId and data-characterName tags to SVG export
+- [PR130] Replace commandline action allows to load replacements list from a textfile
+- [PR129] SymbolClass export from commandline
+- [PR128] data-characterId and data-characterName tags to SVG export
 - [#1731] Image viewer zoom support
-- Cloning of tags and frames
+- [PR134] Cloning of tags and frames
 - Changing tag position
 - Tag list view
-- Inserting new tags before and after selection
+- [PR135] Inserting new tags before and after selection
 - [#1825], [#1737] Adding new frames
 - Context menu icons
 - Icon of tag in raw editor
@@ -649,7 +950,7 @@ All notable changes to this project will be documented in this file.
 
 ## [15.1.1] - 2022-07-03
 ### Added
-- Support for loading external images in DefineExternalImage2, DefineSubImage
+- [PR122] Support for loading external images in DefineExternalImage2, DefineSubImage
 
 ### Changed
 - Updated pt_BR translation
@@ -663,7 +964,7 @@ All notable changes to this project will be documented in this file.
 
 ## [15.1.0] - 2022-02-20
 ### Added
-- Display object depth in flash panel
+- [PR116] Display object depth in flash panel
 - Show imported files on script import, able to cancel import
 - [#270] AS3 show progress on deofuscating p-code
 - [#1718] Show progress on injecting debug info / SWD generation (before Debugging)
@@ -682,7 +983,7 @@ All notable changes to this project will be documented in this file.
 - AS3 - direct editation - call on local register
 - AS3 - direct editation - resolve properties and local regs before types
 - AS3 - direct editation - call on index
-- Incorrect position in Flash Player preview and SWF export
+- [PR117] Incorrect position in Flash Player preview and SWF export
 - AS1/2 actioncontainers (like try) inside ifs
 - AS1/2 switch detection
 - [#1766] AS3 - direct editation - namespaces on global level without leading colon
@@ -693,11 +994,11 @@ All notable changes to this project will be documented in this file.
 - [#1773] - Auto set flagWideCodes on FontInfo wide character adding
 - [#1769] - Do not mark getter+setter as colliding (#xxx suffix)
 - [#1801] - Flex SDK not required on commandline when Flex compilation is disabled
-- Multiname - performance issues
+- [PR118] Multiname - performance issues
 
 ## [15.0.0] - 2021-11-29
 ### Added
-- Frame dependencies
+- [PR114] Frame dependencies
 
 ### Changed
 - AS1/2 direct editation no longer marked as experimental
@@ -744,7 +1045,7 @@ All notable changes to this project will be documented in this file.
 - AS1/2 - empty tellTarget
 - AS1/2 - deobfuscate object literal names
 - AS1/2 - spacing in with statement
-- Playercontrols frame display incorrect frame
+- [PR113] Playercontrols frame display incorrect frame
 - AS1/2 - direct editation - empty parenthesis nullpointer
 - AS1/2 - delete on nonmember
 - AS1/2 - direct editation - Infinity, NaN can be used as identifiers, are normal variables
@@ -799,9 +1100,9 @@ All notable changes to this project will be documented in this file.
 - SoundStreamHead has associated sprite id in its name in the tagtree
 - [#1485] Improved skins support, night mode
 - [#1681] AS3 - context menu for adding classes on packages
-- GFX: Support for loading external images
+- [PR101] GFX: Support for loading external images
 - Updated Japanese translation
-- Try loading .gfx files if .swf failed to load for imports and similar
+- [PR102] Try loading .gfx files if .swf failed to load for imports and similar
 - [#1744] SVG shape import from commandline
 - [#1496] repeat escape sequence `\{xx}C` to avoid long same char strings/names
 
@@ -1188,7 +1489,7 @@ All notable changes to this project will be documented in this file.
 
 ## [11.3.0] - 2020-04-25
 ### Added
-- Possibility to open SWF files using open on Mac
+- [PR69] Possibility to open SWF files using open on Mac
 - Updated turkish translation
 
 ### Fixed
@@ -1196,8 +1497,8 @@ All notable changes to this project will be documented in this file.
 - [#1457] AS3 switch without lookupswitch ins detection
 - [#1457] pushing on stack before exit item (return/throw)
 - [#1503] NullPointer Exception on commandline FLA export
-- AS3 direct editation - invalid generation of lookupswitch
-- AS3 direct editation - fix access to protected members with super
+- [PR74] AS3 direct editation - invalid generation of lookupswitch
+- [PR75] AS3 direct editation - fix access to protected members with super
 - [#1529] commandline selection of tag ids now applies to sprites and buttons
 
 ### Changed
@@ -1266,6 +1567,7 @@ All notable changes to this project will be documented in this file.
 - [#1369] Allow zoom in sprite (and button) export
 - Debug tooltips on hover
 - AS3 deobfuscation - removing push instructions immediately followed by pop
+- [PR53] Click to Jump feature in the basic tag info
 
 ### Changed
 - Homepage is now on GitHub jindrapetrik/jpexs-decompiler instead of free-decompiler.com
@@ -1382,7 +1684,7 @@ All notable changes to this project will be documented in this file.
 - [#1210] Frame Export fix
 - Improved/fixed go to declaration in AS3
 - [#1217] PCode window not in same position as AS
-- Hide memor search on non windows platform
+- Hide memory search on non windows platform
 - [#1244] Incorrect showing of NOP instructions
 - [#1244] Remove unknown actions when deobfuscation is enabled, compole unknown instructions back
 - [#1241] File content is different from hex view
@@ -1392,6 +1694,7 @@ All notable changes to this project will be documented in this file.
 - [#1265] Error during export
 - [#1268] Font export - Using second glyph when two glyphs for one character found
 - [#1268] GFX compacted font - fixed advance values on export
+- FLA export - allow to rename target file instead of same name as swf file
 
 ## [8.0.1] - 2016-02-20
 ### Changed
@@ -2888,6 +3191,12 @@ All notable changes to this project will be documented in this file.
 ### Added
 - Initial public release
 
+[20.1.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version20.0.0...version20.1.0
+[20.0.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version19.1.2...version20.0.0
+[19.1.2]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version19.1.1...version19.1.2
+[19.1.1]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version19.1.0...version19.1.1
+[19.1.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version19.0.0...version19.1.0
+[19.0.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version18.5.0...version19.0.0
 [18.5.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version18.4.1...version18.5.0
 [18.4.1]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version18.4.0...version18.4.1
 [18.4.0]: https://github.com/jindrapetrik/jpexs-decompiler/compare/version18.3.6...version18.4.0
@@ -3036,6 +3345,93 @@ All notable changes to this project will be documented in this file.
 [alpha 9]: https://github.com/jindrapetrik/jpexs-decompiler/compare/alpha8...alpha9
 [alpha 8]: https://github.com/jindrapetrik/jpexs-decompiler/compare/alpha7...alpha8
 [alpha 7]: https://github.com/jindrapetrik/jpexs-decompiler/releases/tag/alpha7
+[#2100]: https://www.free-decompiler.com/flash/issues/2100
+[#2123]: https://www.free-decompiler.com/flash/issues/2123
+[#2119]: https://www.free-decompiler.com/flash/issues/2119
+[#2129]: https://www.free-decompiler.com/flash/issues/2129
+[#2131]: https://www.free-decompiler.com/flash/issues/2131
+[#2124]: https://www.free-decompiler.com/flash/issues/2124
+[#2134]: https://www.free-decompiler.com/flash/issues/2134
+[#2132]: https://www.free-decompiler.com/flash/issues/2132
+[#2138]: https://www.free-decompiler.com/flash/issues/2138
+[#2021]: https://www.free-decompiler.com/flash/issues/2021
+[#2000]: https://www.free-decompiler.com/flash/issues/2000
+[#2116]: https://www.free-decompiler.com/flash/issues/2116
+[#2122]: https://www.free-decompiler.com/flash/issues/2122
+[#2111]: https://www.free-decompiler.com/flash/issues/2111
+[#2127]: https://www.free-decompiler.com/flash/issues/2127
+[#2025]: https://www.free-decompiler.com/flash/issues/2025
+[#2078]: https://www.free-decompiler.com/flash/issues/2078
+[#2053]: https://www.free-decompiler.com/flash/issues/2053
+[#2133]: https://www.free-decompiler.com/flash/issues/2133
+[#2135]: https://www.free-decompiler.com/flash/issues/2135
+[#1194]: https://www.free-decompiler.com/flash/issues/1194
+[#2136]: https://www.free-decompiler.com/flash/issues/2136
+[#2139]: https://www.free-decompiler.com/flash/issues/2139
+[#2156]: https://www.free-decompiler.com/flash/issues/2156
+[#2145]: https://www.free-decompiler.com/flash/issues/2145
+[#2142]: https://www.free-decompiler.com/flash/issues/2142
+[#2148]: https://www.free-decompiler.com/flash/issues/2148
+[#2143]: https://www.free-decompiler.com/flash/issues/2143
+[#2153]: https://www.free-decompiler.com/flash/issues/2153
+[#2163]: https://www.free-decompiler.com/flash/issues/2163
+[#2162]: https://www.free-decompiler.com/flash/issues/2162
+[#2152]: https://www.free-decompiler.com/flash/issues/2152
+[#2147]: https://www.free-decompiler.com/flash/issues/2147
+[#2120]: https://www.free-decompiler.com/flash/issues/2120
+[#1130]: https://www.free-decompiler.com/flash/issues/1130
+[#1220]: https://www.free-decompiler.com/flash/issues/1220
+[#1717]: https://www.free-decompiler.com/flash/issues/1717
+[#2005]: https://www.free-decompiler.com/flash/issues/2005
+[#2105]: https://www.free-decompiler.com/flash/issues/2105
+[#1799]: https://www.free-decompiler.com/flash/issues/1799
+[#1306]: https://www.free-decompiler.com/flash/issues/1306
+[#1768]: https://www.free-decompiler.com/flash/issues/1768
+[#2013]: https://www.free-decompiler.com/flash/issues/2013
+[#2104]: https://www.free-decompiler.com/flash/issues/2104
+[#2031]: https://www.free-decompiler.com/flash/issues/2031
+[#1866]: https://www.free-decompiler.com/flash/issues/1866
+[#503]: https://www.free-decompiler.com/flash/issues/503
+[#1011]: https://www.free-decompiler.com/flash/issues/1011
+[#1257]: https://www.free-decompiler.com/flash/issues/1257
+[#1902]: https://www.free-decompiler.com/flash/issues/1902
+[#1903]: https://www.free-decompiler.com/flash/issues/1903
+[#2048]: https://www.free-decompiler.com/flash/issues/2048
+[#2108]: https://www.free-decompiler.com/flash/issues/2108
+[#2074]: https://www.free-decompiler.com/flash/issues/2074
+[#2112]: https://www.free-decompiler.com/flash/issues/2112
+[#1193]: https://www.free-decompiler.com/flash/issues/1193
+[#802]: https://www.free-decompiler.com/flash/issues/802
+[#2113]: https://www.free-decompiler.com/flash/issues/2113
+[#2099]: https://www.free-decompiler.com/flash/issues/2099
+[#2090]: https://www.free-decompiler.com/flash/issues/2090
+[#2079]: https://www.free-decompiler.com/flash/issues/2079
+[#116]: https://www.free-decompiler.com/flash/issues/116
+[#2097]: https://www.free-decompiler.com/flash/issues/2097
+[#2098]: https://www.free-decompiler.com/flash/issues/2098
+[#2093]: https://www.free-decompiler.com/flash/issues/2093
+[#1678]: https://www.free-decompiler.com/flash/issues/1678
+[#2094]: https://www.free-decompiler.com/flash/issues/2094
+[#2095]: https://www.free-decompiler.com/flash/issues/2095
+[#223]: https://www.free-decompiler.com/flash/issues/223
+[#1449]: https://www.free-decompiler.com/flash/issues/1449
+[#2070]: https://www.free-decompiler.com/flash/issues/2070
+[#2073]: https://www.free-decompiler.com/flash/issues/2073
+[#2057]: https://www.free-decompiler.com/flash/issues/2057
+[#2066]: https://www.free-decompiler.com/flash/issues/2066
+[#2010]: https://www.free-decompiler.com/flash/issues/2010
+[#2043]: https://www.free-decompiler.com/flash/issues/2043
+[#2017]: https://www.free-decompiler.com/flash/issues/2017
+[#2052]: https://www.free-decompiler.com/flash/issues/2052
+[#2058]: https://www.free-decompiler.com/flash/issues/2058
+[#2072]: https://www.free-decompiler.com/flash/issues/2072
+[#2029]: https://www.free-decompiler.com/flash/issues/2029
+[#2077]: https://www.free-decompiler.com/flash/issues/2077
+[#2076]: https://www.free-decompiler.com/flash/issues/2076
+[#2086]: https://www.free-decompiler.com/flash/issues/2086
+[#2009]: https://www.free-decompiler.com/flash/issues/2009
+[#2022]: https://www.free-decompiler.com/flash/issues/2022
+[#1355]: https://www.free-decompiler.com/flash/issues/1355
 [#1998]: https://www.free-decompiler.com/flash/issues/1998
 [#2038]: https://www.free-decompiler.com/flash/issues/2038
 [#2028]: https://www.free-decompiler.com/flash/issues/2028
@@ -3178,7 +3574,6 @@ All notable changes to this project will be documented in this file.
 [#1863]: https://www.free-decompiler.com/flash/issues/1863
 [#1865]: https://www.free-decompiler.com/flash/issues/1865
 [#1846]: https://www.free-decompiler.com/flash/issues/1846
-[#1678]: https://www.free-decompiler.com/flash/issues/1678
 [#1414]: https://www.free-decompiler.com/flash/issues/1414
 [#1755]: https://www.free-decompiler.com/flash/issues/1755
 [#1465]: https://www.free-decompiler.com/flash/issues/1465
@@ -3367,7 +3762,6 @@ All notable changes to this project will be documented in this file.
 [#1378]: https://www.free-decompiler.com/flash/issues/1378
 [#1415]: https://www.free-decompiler.com/flash/issues/1415
 [#1484]: https://www.free-decompiler.com/flash/issues/1484
-[#1449]: https://www.free-decompiler.com/flash/issues/1449
 [#1456]: https://www.free-decompiler.com/flash/issues/1456
 [#1240]: https://www.free-decompiler.com/flash/issues/1240
 [#1308]: https://www.free-decompiler.com/flash/issues/1308
@@ -3411,11 +3805,9 @@ All notable changes to this project will be documented in this file.
 [#1172]: https://www.free-decompiler.com/flash/issues/1172
 [#1174]: https://www.free-decompiler.com/flash/issues/1174
 [#1183]: https://www.free-decompiler.com/flash/issues/1183
-[#1193]: https://www.free-decompiler.com/flash/issues/1193
 [#1200]: https://www.free-decompiler.com/flash/issues/1200
 [#1198]: https://www.free-decompiler.com/flash/issues/1198
 [#1205]: https://www.free-decompiler.com/flash/issues/1205
-[#1194]: https://www.free-decompiler.com/flash/issues/1194
 [#1210]: https://www.free-decompiler.com/flash/issues/1210
 [#1217]: https://www.free-decompiler.com/flash/issues/1217
 [#1244]: https://www.free-decompiler.com/flash/issues/1244
@@ -3452,7 +3844,6 @@ All notable changes to this project will be documented in this file.
 [#1148]: https://www.free-decompiler.com/flash/issues/1148
 [#1152]: https://www.free-decompiler.com/flash/issues/1152
 [#1154]: https://www.free-decompiler.com/flash/issues/1154
-[#116]: https://www.free-decompiler.com/flash/issues/116
 [#1070]: https://www.free-decompiler.com/flash/issues/1070
 [#1098]: https://www.free-decompiler.com/flash/issues/1098
 [#1033]: https://www.free-decompiler.com/flash/issues/1033
@@ -3669,7 +4060,6 @@ All notable changes to this project will be documented in this file.
 [#508]: https://www.free-decompiler.com/flash/issues/508
 [#305]: https://www.free-decompiler.com/flash/issues/305
 [#312]: https://www.free-decompiler.com/flash/issues/312
-[#503]: https://www.free-decompiler.com/flash/issues/503
 [#304]: https://www.free-decompiler.com/flash/issues/304
 [#306]: https://www.free-decompiler.com/flash/issues/306
 [#507]: https://www.free-decompiler.com/flash/issues/507
@@ -3778,7 +4168,6 @@ All notable changes to this project will be documented in this file.
 [#318]: https://www.free-decompiler.com/flash/issues/318
 [#319]: https://www.free-decompiler.com/flash/issues/319
 [#323]: https://www.free-decompiler.com/flash/issues/323
-[#223]: https://www.free-decompiler.com/flash/issues/223
 [#261]: https://www.free-decompiler.com/flash/issues/261
 [#269]: https://www.free-decompiler.com/flash/issues/269
 [#274]: https://www.free-decompiler.com/flash/issues/274
@@ -3971,3 +4360,29 @@ All notable changes to this project will be documented in this file.
 [#32]: https://www.free-decompiler.com/flash/issues/32
 [#31]: https://www.free-decompiler.com/flash/issues/31
 [#27]: https://www.free-decompiler.com/flash/issues/27
+[PR176]: https://github.com/jindrapetrik/jpexs-decompiler/pull/176
+[PR178]: https://github.com/jindrapetrik/jpexs-decompiler/pull/178
+[PR179]: https://github.com/jindrapetrik/jpexs-decompiler/pull/179
+[PR177]: https://github.com/jindrapetrik/jpexs-decompiler/pull/177
+[PR109]: https://github.com/jindrapetrik/jpexs-decompiler/pull/109
+[PR110]: https://github.com/jindrapetrik/jpexs-decompiler/pull/110
+[PR173]: https://github.com/jindrapetrik/jpexs-decompiler/pull/173
+[PR119]: https://github.com/jindrapetrik/jpexs-decompiler/pull/119
+[PR144]: https://github.com/jindrapetrik/jpexs-decompiler/pull/144
+[PR130]: https://github.com/jindrapetrik/jpexs-decompiler/pull/130
+[PR129]: https://github.com/jindrapetrik/jpexs-decompiler/pull/129
+[PR128]: https://github.com/jindrapetrik/jpexs-decompiler/pull/128
+[PR134]: https://github.com/jindrapetrik/jpexs-decompiler/pull/134
+[PR135]: https://github.com/jindrapetrik/jpexs-decompiler/pull/135
+[PR122]: https://github.com/jindrapetrik/jpexs-decompiler/pull/122
+[PR116]: https://github.com/jindrapetrik/jpexs-decompiler/pull/116
+[PR117]: https://github.com/jindrapetrik/jpexs-decompiler/pull/117
+[PR118]: https://github.com/jindrapetrik/jpexs-decompiler/pull/118
+[PR114]: https://github.com/jindrapetrik/jpexs-decompiler/pull/114
+[PR113]: https://github.com/jindrapetrik/jpexs-decompiler/pull/113
+[PR101]: https://github.com/jindrapetrik/jpexs-decompiler/pull/101
+[PR102]: https://github.com/jindrapetrik/jpexs-decompiler/pull/102
+[PR69]: https://github.com/jindrapetrik/jpexs-decompiler/pull/69
+[PR74]: https://github.com/jindrapetrik/jpexs-decompiler/pull/74
+[PR75]: https://github.com/jindrapetrik/jpexs-decompiler/pull/75
+[PR53]: https://github.com/jindrapetrik/jpexs-decompiler/pull/53
