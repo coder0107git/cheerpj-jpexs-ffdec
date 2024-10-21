@@ -5,7 +5,7 @@
     <title>CheerpJ test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
-    <script src="https://cjrtnc.leaningtech.com/3_20240110_341/cj3loader.js"></script>
+    <script src="https://cjrtnc.leaningtech.com/3_20241017_546/cj3loader.js"></script>
     <!--<style>
         .as-console-wrapper {
             z-index: 500000 !important;
@@ -39,10 +39,16 @@
 </head>
 <body>
     <img 
-        src="https://cjrtnc.leaningtech.com/3_20240110_341/cheerpj.svg" 
+        src="https://cjrtnc.leaningtech.com/3_20241017_546/cheerpj.svg" 
         alt="Spinning circle image"
         class="cheerpj-logo-direct-embed"/>
     <div id="container">
+        <label for="version-select">FFDEC Version:</label>
+        <select name="versions" id="version-select">
+            <option value="default" selected>Default</option>
+        </select>
+        <br><br>
+
         <label>
             SWF File Upload:
             <input type="file" accept=".swf" oninput="window.handleFiles(this)">
@@ -67,7 +73,8 @@
         </button>
     </div>
 
-    <script type="module">        
+    <script src="./sw-loader.js"></script>
+    <script type="module">
         window.onerror = (msg, src, line, col, err) => {
             console.warn(
                 `message: ${msg}`,
@@ -127,16 +134,12 @@
         window.handleFiles = async (element, uploaded = true) => {
             const file = uploaded 
                 ? element.files[0] 
-                : await fetch(
-                    // CORS Proxy
-                    "https://api.codetabs.com/v1/proxy?quest=" + encodeURIComponent(
-                        "http://web.archive.org/web/20200730061016oe_/https://media.scouting.org/boyslife/onlinegames/tankz2/tankz2.swf"
-                    )
-                ).then(res => res.blob())
-                .then(blob => new Blob(
-                    [blob],
-                    { type: "application/x-shockwave-flash" },
-                ));
+                : await fetch("/tankz2.swf")
+                    .then(res => res.blob())
+                    .then(blob => new Blob(
+                        [blob],
+                        { type: "application/x-shockwave-flash" },
+                    ));
             const buff = await file.arrayBuffer();
             const name = uploaded ? file.name : "tankz2.swf";
 
@@ -145,6 +148,21 @@
         };
         
         async function runApp(fileName = null) {
+            const versionSelect = document.querySelector("select");
+            let basePath = "";
+            if(versionSelect.value !== "default") {
+                basePath = await fetch("/loadFs", {
+                    headers: {
+                        "Accept": "application/json",
+                        "Content-Type": "application/json",
+                    },
+                    method: "POST",
+                    body: JSON.stringify(versionInfoMap.get(versionSelect.value))
+                })
+                    .then((res) => res.text())
+                    .catch(() => "");
+            }
+
             const container = document.querySelector("#container");
             container.replaceChildren(); // Delete contents
             cheerpjCreateDisplay(-1, -1, container);
@@ -176,8 +194,9 @@
             );
 
             console.group("Running...");
+            console.info("[Loader] App path:", `/app/${basePath}ffdec.jar`);
             const exitCode = await cheerpjRunJar(
-                "/app/ffdec.jar", 
+                `/app/${basePath}ffdec.jar`, 
                 "-config",
                 config,
                 ...(fileName ? [`/str/${fileName}`] : []), // Support running without file
