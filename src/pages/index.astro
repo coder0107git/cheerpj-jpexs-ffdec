@@ -1,3 +1,11 @@
+---
+// <reference types="../lib/cheerpj.d.ts" />
+
+import { getCheerpJLink } from "../lib/cheerpj.ts";
+
+const cheerpjURL = await getCheerpJLink();
+
+---
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +13,8 @@
     <title>CheerpJ test</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="color-scheme" content="dark light">
-    <script src="https://cjrtnc.leaningtech.com/3_20241017_546/cj3loader.js"></script>
+    <!-- <script is:inline src="https://cjrtnc.leaningtech.com/3_20241017_546/cj3loader.js"></script> -->
+    <!-- <script src="../lib/cheerpj.ts"></script> -->
     <!--<style>
         .as-console-wrapper {
             z-index: 500000 !important;
@@ -39,13 +48,13 @@
 </head>
 <body>
     <img 
-        src="https://cjrtnc.leaningtech.com/3_20241017_546/cheerpj.svg" 
+        src={new URL("./cheerpj.svg", cheerpjURL).toString()}
         alt="Spinning circle image"
         class="cheerpj-logo-direct-embed"/>
     <div id="container">
         <label for="version-select">FFDEC Version:</label>
         <select name="versions" id="version-select">
-            <option value="default" selected>Default</option>
+            <option value="default" selected>Default (20.1.0)</option>
         </select>
         <br><br>
 
@@ -57,12 +66,12 @@
         OR:
         <button 
             onclick="{
-                const res = window.confirm('Are you sure? This file has a valid U.S. copyright.\n\n' +
+                /*const res = window.confirm('Are you sure? This file has a valid U.S. copyright.\n\n' +
                 'By continuing you acknowledge that the example file is protected under U.S. ' +
                 'copyright law and accept all responsibility for your use the file. ' +
-                '(i.e. your use of the file must be in accordance with U.S. copyright law)');
+                '(i.e. your use of the file must be in accordance with U.S. copyright law)');*/
                 
-                if(res) window.handleFiles(null, false);
+                if(/* res */ true) { window.handleFiles(null, false); }
             }">
             Use example SWF
         </button>
@@ -73,23 +82,21 @@
         </button>
     </div>
 
-    <script src="./sw-loader.js"></script>
-    <script type="module">
-        window.onerror = (msg, src, line, col, err) => {
-            console.warn(
-                `message: ${msg}`,
-                `source: ${src}`,
-                `lineno: ${line}`,
-                `colno: ${col}`,
-                `error: ${err}`,
-            );
-        };
+    <template data-cheerpj-url={cheerpjURL}></template>
+
+    <script>
+        import { loadEruda } from "../lib/eruda.ts";
+        import loadCheerpJ from "../lib/cheerpj.ts";
+        await loadCheerpJ();
+
+        import "../lib/sw-loader.ts";
+        
 
         const supportsClipboardAPI = 
             window.isSecureContext 
             && await navigator
                 .permissions
-                .query({ name: "clipboard-read" })
+                .query({ name: "clipboard-read" as PermissionName })
                 .then(({ state }) => 
                     // Browser supports and can access or ask for access    
                     state == "granted" 
@@ -104,14 +111,13 @@
                 window.addEventListener("hashchange", initConsole, { once: true });
                 return;
             }
-            
-            await import("https://cdn.jsdelivr.net/npm/eruda@3/eruda.js");
-            await eruda.init();
+
+            await loadEruda();
         }
         await initConsole();
 
         
-        console.groupCollapsed("Initializing...");
+        console.group/*Collapsed*/("Initializing...");
         await cheerpjInit({
             javaProperties: [
                 "java.net.preferIPv4Stack=true",
@@ -123,33 +129,47 @@
             clipboardMode: supportsClipboardAPI === true ? "permission" : "system",
             ...(!urlParams.get("base") 
                 ? {}  
-                : { overrideDocumentBase: urlParams.get("base") }
+                : { overrideDocumentBase: urlParams.get("base")! }
             ),
             beepCallback: () => alert("Beep!"),
             enableInputMethods: true,
+            // enableDebug: true,
+            execCallback: (cmdPath, argsArray) => {
+                console.log("[CMD]", cmdPath, argsArray)
+            },
             /*natives: {},*/
         });
         console.groupEnd();
 
-        window.handleFiles = async (element, uploaded = true) => {
-            const file = uploaded 
-                ? element.files[0] 
-                : await fetch("/tankz2.swf")
+
+        async function _handleFiles(element: HTMLInputElement, uploaded: boolean = true): Promise<void> {
+            const file: File | Blob = uploaded 
+                ? element.files![0] 
+                : await fetch("/example.swf")
                     .then(res => res.blob())
                     .then(blob => new Blob(
                         [blob],
                         { type: "application/x-shockwave-flash" },
                     ));
             const buff = await file.arrayBuffer();
-            const name = uploaded ? file.name : "tankz2.swf";
+            const name = uploaded ? (file as File).name : "tankz2.swf";
 
             cheerpOSAddStringFile(`/str/${name}`, new Uint8Array(buff));
             runApp(name);
-        };
+        }
+
+        declare global {
+            var handleFiles: typeof _handleFiles;
+        }
+
+        window.handleFiles = _handleFiles;
+        // console.log(window.handleFiles);
         
-        async function runApp(fileName = null) {
-            const versionSelect = document.querySelector("select");
-            let basePath = "";
+
+        async function _runApp(fileName: string | null = null) {
+            const versionSelect = document.querySelector("select")!;
+            let basePath = "ffdec_20-1-0/";
+
             if(versionSelect.value !== "default") {
                 basePath = await fetch("/loadFs", {
                     headers: {
@@ -157,23 +177,53 @@
                         "Content-Type": "application/json",
                     },
                     method: "POST",
-                    body: JSON.stringify(versionInfoMap.get(versionSelect.value))
+                    body: JSON.stringify(window.versionInfoMap.get(versionSelect.value))
                 })
                     .then((res) => res.text())
-                    .catch(() => "");
+                    .catch(() => basePath);
             }
 
-            const container = document.querySelector("#container");
-            container.replaceChildren(); // Delete contents
+            const container: HTMLDivElement = document.querySelector("#container")!;
+            // Delete page contents
+            container.replaceChildren(); 
             cheerpjCreateDisplay(-1, -1, container);
             console.log("Created display...");
             
-            let config = Object.assign(Object.create(null), {
+            /** 
+             * The available config options can be listed by running 
+             * `java -jar ffdec.jar -listconfigs`. It then dumps out a custom format 
+             * that looks something like `allowDragAndDropInTagListTree[true]-bool`.
+             * 
+             * Broken down, the format consists of `propertyName[defaultValue]-type`.
+             * 
+             * 
+             * Using the following js regex with the corresponding replacement gets you 
+             * pretty close to valid typescript
+             * 
+             *     Regex: `/(?<propertyName>.*)\[(?<defaultValue>.*)\]-(?<type>.*)/g`
+             *     Replacement: `    "$<propertyName>": $<type> = $<defaultValue>;`
+             * 
+             * Plopping that into the following and then fixing syntax and type errors
+             * gets you basically the rest of the way to valid typescript.
+             *   ```ts
+             *     type bool = Boolean;
+             *     type integer = number | null;
+             *     type float = number | null;
+             *     type nullable_string = string | null;
+             *     type date = string;
+             *     type java_enum = unknown;
+             *     
+             *     class configOptions {
+             *         // Replaced output here
+             *     }
+             *   ```
+             */
+            const configEntries = Array.from(Object.entries({
                 lastSaveDir: "/files",
                 lastOpenDir: "/str",
                 _showDebugMenu: true,
-                airLibLocation: "/app/flashlib/airglobal.swc",
-                playerLibLocation: "/app/flashlib/playerglobal32_0.swc",
+                airLibLocation: `/app/${basePath}flashlib/airglobal.swc`,
+                playerLibLocation: `/app/${basePath}flashlib/playerglobal32_0.swc`,
                 "check.updates.enabled": false,
                 pluginPath: "/app/plugins/",
                 useDetailedLogging: true,
@@ -182,21 +232,18 @@
                 "gui.window.maximized.vertical": true,
                 "gui.window.height": document.body.clientHeight,
                 "gui.window.width": document.body.clientWidth,
-            });
-            // Format config object as command line options string
-            config = Object.entries(config).reduce(
-                (accumulator, entry) => 
-                    `${accumulator === null 
-                        ? "" 
-                        : `${accumulator},` 
-                    }${entry[0]}=${entry[1]}`,
-                null,
-            );
+            }));
+            // Format as a command line options string
+            const config = configEntries
+                .map(([key, value]) => `${key}=${value}`)
+                .join(",");
+            // alert(config);
 
             console.group("Running...");
             console.info("[Loader] App path:", `/app/${basePath}ffdec.jar`);
             const exitCode = await cheerpjRunJar(
-                `/app/${basePath}ffdec.jar`, 
+                `/app/${basePath}ffdec.jar`,
+                // "-listconfigs",
                 "-config",
                 config,
                 ...(fileName ? [`/str/${fileName}`] : []), // Support running without file
@@ -208,7 +255,11 @@
             alert(`App exited with code ${exitCode}. You will need to reload the page to open it again.`)
         }
 
-        window.runApp = runApp;
+        declare global {
+            var runApp: typeof _runApp;
+        }
+
+        window.runApp = _runApp;
     </script>
 </body>
 </html>

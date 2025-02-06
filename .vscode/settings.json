@@ -15,14 +15,18 @@
         "Inotify",
         "javaws",
         "jaxp",
+        "jcubic",
         "JPEXS",
         "jsse",
+        "listconfigs",
         "localedata",
         "playerglobal",
         "resolv",
         "socketpair",
         "sunjce",
+        "tailscale",
         "tankz",
-        "tzdb"
+        "tzdb",
+        "zenfs"
     ]
 }

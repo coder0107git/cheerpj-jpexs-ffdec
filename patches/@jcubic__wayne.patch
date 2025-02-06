@@ -1,0 +1,15 @@
+diff --git a/index.js b/index.js
+index 688b860b2be46a017fdd3972e590480ff98fe730..21e0bd41c95f4bdbd3c24406e8a8dc016b758cd6 100644
+--- a/index.js
++++ b/index.js
+@@ -551,7 +551,9 @@ export class Wayne {
+                     this._handle_error(resolve, req, error);
+                 }
+             });
+-            event.respondWith(promise.catch(() => {}));
++            event.respondWith(promise.catch(() => {
++                debugger;
++            }));
+         });
+         ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'].forEach(method => {
+             this[method.toLowerCase()] = this.method(method);
