@@ -10,12 +10,12 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@jcubic/wayne": "0.18",
+    "@jcubic/wayne": "~0.18.3",
     "@vite-pwa/astro": "^0.5.0",
-    "@zenfs/archives": "^1.0.3",
-    "@zenfs/core": "^1.9.0",
-    "@zenfs/dom": "^1.1.4",
-    "astro": "^5.2.3",
+    "@zenfs/archives": "^1.0.4",
+    "@zenfs/core": "^1.9.4",
+    "@zenfs/dom": "^1.1.5",
+    "astro": "^5.2.5",
     "eruda": "^3.4.1",
     "mime": "^4.0.6",
     "path-browserify": "1.0.1",
