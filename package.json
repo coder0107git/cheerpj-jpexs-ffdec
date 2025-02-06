@@ -1,17 +1,34 @@
 {
   "name": "cheerpj-tests",
-  "private": true,
+  "type": "module",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "serve --no-clipboard --symlinks -p 3001 ."
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@jcubic/wayne": "0.18",
+    "@vite-pwa/astro": "^0.5.0",
+    "@zenfs/archives": "^1.0.3",
+    "@zenfs/core": "^1.9.0",
+    "@zenfs/dom": "^1.1.4",
+    "astro": "^5.2.3",
+    "eruda": "^3.4.1",
+    "mime": "^4.0.6",
+    "path-browserify": "1.0.1",
+    "range-parser": "^1.2.1",
+    "vite-plugin-pwa": "^0.21.1"
   },
   "devDependencies": {
-    "serve": "^14.2.1"
+    "@types/path-browserify": "^1.0.3",
+    "@types/range-parser": "^1.2.7"
+  },
+  "pnpm": {
+    "patchedDependencies": {
+      "@jcubic/wayne": "patches/@jcubic__wayne.patch"
+    }
   }
 }
