@@ -11,7 +11,7 @@ if ("serviceWorker" in navigator) {
             reg.addEventListener("updatefound", () => {
                 const installingWorker = reg.installing!;
 
-                installingWorker.addEventListener("statechange", (e) => {
+                installingWorker.addEventListener("statechange", () => {
                     const { state } = installingWorker;
 
                     if(state === "installed") {
@@ -44,16 +44,22 @@ if ("serviceWorker" in navigator) {
         populateVersionPicker();
 }
 
-type VersionInfo = [string, {
-    url: string,
-    slug: string,
-}];
+type VersionInfo = [
+    string, 
+    {
+        url: string,
+        slug: string,
+    }
+];
 
 type ReleasesAPI = {
-    assets: [{ name: string; browser_download_url: string }];
+    assets: [{ 
+        name: string; 
+        browser_download_url: string 
+    }];
     name: string;
     tag_name: string;
-  }
+};
 
 declare global {
     interface Window {
@@ -62,16 +68,18 @@ declare global {
 }
 
 async function populateVersionPicker() {
-    const releases = await fetch(
+    const releases: ReleasesAPI[] = await fetch(
             "https://api.github.com/repos/jindrapetrik/jpexs-decompiler/releases?per_page=20"
         )
         .then((res) => res.json())
         .catch(() => alert("Failed to fetch FFDEC versions"));
 
-    const versionInfo: VersionInfo = releases.map((release: ReleasesAPI) => {
+    const versionInfo: VersionInfo[] = releases.map(release => {
         const { name, tag_name } = release;
         const downloadUrl = release.assets
-            .filter((asset) => /(?<!(lib|mac).*)\.zip/.test(asset.name))
+            // Get only the universal zip. Technically "lib" is in the java doc 
+            // zip file name, but here anyways for completeness.
+            .filter((asset) => /(?<!(mac|lib|javadoc).*)\.zip/.test(asset.name))
             .map((asset) => asset.browser_download_url)
             .at(0)!;
 
@@ -83,13 +91,13 @@ async function populateVersionPicker() {
             },
         ];
     });
-    window.versionInfoMap = new Map(versionInfo as any);
+    window.versionInfoMap = new Map(versionInfo);
 
 
     const versionSelect = document.querySelector("select")!;
 
     versionSelect.append(...versionInfo.map(release => {
-        const [name] = release as unknown as VersionInfo;
+        const [name] = release;
         const elem = document.createElement("option");
 
         elem.innerText = name;

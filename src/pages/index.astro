@@ -1,7 +1,6 @@
 ---
-// <reference types="../lib/cheerpj.d.ts" />
-
 import { getCheerpJLink } from "../lib/cheerpj.ts";
+import ChiiScript from "../chii-integration/Chii.astro";
 
 const cheerpjURL = await getCheerpJLink();
 
@@ -84,6 +83,7 @@ const cheerpjURL = await getCheerpJLink();
 
     <template data-cheerpj-url={cheerpjURL}></template>
 
+    <ChiiScript />
     <script>
         import { loadEruda } from "../lib/eruda.ts";
         import loadCheerpJ from "../lib/cheerpj.ts";
@@ -126,7 +126,9 @@ const cheerpjURL = await getCheerpJLink();
             preloadProgress: (preloadDone, preloadTotal) => {
                 console.info(`Loaded ${((preloadDone / preloadTotal) * 100).toFixed(5)}% (${preloadDone}/${preloadTotal})`);
             },
-            clipboardMode: supportsClipboardAPI === true ? "permission" : "system",
+            clipboardMode: supportsClipboardAPI === true 
+                ? "permission" 
+                : "system",
             ...(!urlParams.get("base") 
                 ? {}  
                 : { overrideDocumentBase: urlParams.get("base")! }
@@ -144,7 +146,7 @@ const cheerpjURL = await getCheerpJLink();
 
         async function _handleFiles(element: HTMLInputElement, uploaded: boolean = true): Promise<void> {
             const file: File | Blob = uploaded 
-                ? element.files![0] 
+                ? element.files![0]! 
                 : await fetch("/example.swf")
                     .then(res => res.blob())
                     .then(blob => new Blob(

@@ -1,0 +1,11 @@
+---
+import { getIntegrationData } from "./integration-data-store.js";
+
+const { prefix, disabled } = getIntegrationData();
+console.log(getIntegrationData());
+---
+{
+    disabled 
+        ? "" 
+        : <script is:inline src={`${prefix}/target.js`}></script>
+}

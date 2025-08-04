@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
@@ -11,20 +12,22 @@
   },
   "dependencies": {
     "@jcubic/wayne": "~0.18.3",
-    "@vite-pwa/astro": "^0.5.0",
-    "@zenfs/archives": "^1.0.4",
-    "@zenfs/core": "^1.9.4",
-    "@zenfs/dom": "^1.1.5",
-    "astro": "^5.3.1",
+    "@vite-pwa/astro": "^1.0.0",
+    "@zenfs/archives": "^1.1.0",
+    "@zenfs/core": "^2.0.0",
+    "@zenfs/dom": "^1.1.6",
+    "astro": "^5.6.1",
     "eruda": "^3.4.1",
-    "mime": "^4.0.6",
+    "mime": "^4.0.7",
     "path-browserify": "1.0.1",
     "range-parser": "^1.2.1",
-    "vite-plugin-pwa": "^0.21.1"
+    "vite-plugin-pwa": "^1.0.0"
   },
   "devDependencies": {
     "@types/path-browserify": "^1.0.3",
-    "@types/range-parser": "^1.2.7"
+    "@types/range-parser": "^1.2.7",
+    "chii": "^1.15.4",
+    "tinyexec": "^1.0.1"
   },
   "pnpm": {
     "patchedDependencies": {
