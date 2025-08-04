@@ -30,8 +30,8 @@ self.addEventListener("activate", (event) => {
     // Force all pages in scope to use this service worker
     event.waitUntil(clients.claim());
 
+    // Delete old caches
     event.waitUntil((async () => {
-        // Delete old caches
         const cacheKey = getCacheKey();
 
         const keyList = await caches.keys();
@@ -77,6 +77,7 @@ const fsConfigured = configure({
         const extension = fsPath.extname(url.pathname);
         const fileName = fsPath.basename(url.pathname);
 
+        // Only catch URLs for this site
         if (url.origin !== location.origin) {
             next();
             return;
@@ -104,7 +105,7 @@ const fsConfigured = configure({
                 fileExists: false 
             }));
 
-        if(fileExists !== true) {
+        if(fileExists === false) {
             return res.send(null, {
                 status: 404,
                 statusText: "Not Found",
@@ -124,15 +125,16 @@ const fsConfigured = configure({
             });
         }
 
-        const [{ start, end }] = rangeResult;
+        const { start, end } = rangeResult[0]!;
         console.log(virtualFilePath, [start, end]);
 
         
-        /*const stream: Blob = await streamToBlob(
+        /*const stream: Blob = await streamToBlob(  
             fs.createReadStream(virtualFilePath, { start, end })
         );*/
         // TODO: Replace this with `fs.createReadStream(virtualFilePath, { start, end })`
         // once https://github.com/zen-fs/core/issues/175 is resolved.
+        // TODO: The above issue has been resolved. Do the above todo.
         const file = await fs.openAsBlob(virtualFilePath);
         const stream = file.slice(
             start, 
@@ -150,7 +152,7 @@ const fsConfigured = configure({
             headers: new Headers({
                 "Accept-Ranges": "bytes",
                 "Content-Range": `bytes ${start}-${end}/${size}`,
-                "Content-Length": end - start + 1 as any,
+                "Content-Length": `${end - start + 1}`,
                 "Content-Disposition": `inline; filename="${fileName}"`,
                 "Date": new Date().toUTCString(),
             }),
@@ -227,7 +229,7 @@ app.post("/loadFs", async (req: any, res: any) => {
 });
 
 
-app.get("/example.swf", async (req: any, res: any) => {
+app.get("/example.swf", async (_req: any, res: any) => {
     const cache = await caches.open("example-swf");
     const cacheResponse = await cache.match("example.swf");
     let exampleSwf = cacheResponse;
