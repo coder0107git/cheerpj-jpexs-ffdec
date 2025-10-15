@@ -24,33 +24,38 @@ export default defineConfig({
         enabled: false,
     },
     vite: {
-        server:
+        server: {
+            allowedHosts: [".gitpod.io"],
+        },
             // Allow all hostnames only during dev
-            isDevelopmentEnv
-                ? {
-                    allowedHosts: ["4321-coder0107gi-cheerpj3jpe-rtfmgrkxz5c.ws-us120.gitpod.io"],
-                    // proxy: {
-                    //     '^/chii/target/.*': {
-                    //         target: 'ws://127.0.0.1:8080/',
-                    //         ws: true,
+            // isDevelopmentEnv
+            //     ? {
+            //         allowedHosts: [".gitpod.io"],
+            //         // proxy: {
+            //         //     '^/chii/target/.*': {
+            //         //         target: 'ws://127.0.0.1:8080/',
+            //         //         ws: true,
 
-                    //         changeOrigin: true,
-                    //         rewriteWsOrigin: true,
-                    //         rewrite: (path) => path.replace(/^\/chii/, ''),
-                    //     },
-                    //     '/chii/': {
-                    //         target: 'http://127.0.0.1:8080/',
-                    //         changeOrigin: true,
-                    //         // rewrite: (path) => path.replace(/^\/chii/, ''),
-                    //     },
-                    //     // '^/chii/.*': {
-                    //     //     target: 'http://127.0.0.1:8080/',
-                    //     //     changeOrigin: true,
-                    //     //     rewrite: (path) => path.replace(/^\/chii/, ''),
-                    //     // },
-                    // },
-                }
-                : {},
+            //         //         changeOrigin: true,
+            //         //         rewriteWsOrigin: true,
+            //         //         rewrite: (path) => path.replace(/^\/chii/, ''),
+            //         //     },
+            //         //     '/chii/': {
+            //         //         target: 'http://127.0.0.1:8080/',
+            //         //         changeOrigin: true,
+            //         //         // rewrite: (path) => path.replace(/^\/chii/, ''),
+            //         //     },
+            //         //     // '^/chii/.*': {
+            //         //     //     target: 'http://127.0.0.1:8080/',
+            //         //     //     changeOrigin: true,
+            //         //     //     rewrite: (path) => path.replace(/^\/chii/, ''),
+            //         //     // },
+            //         // },
+            //     }
+            //     : {},
+        // preview: {
+        //     allowedHosts: [".gitpod.io", "4321-coder0107gi-cheerpj3jpe-rtfmgrkxz5c.ws-us121.gitpod.io"],
+        // },
     },
     server: {
         headers: {
@@ -58,10 +63,10 @@ export default defineConfig({
         },
     },
     integrations: [
-        // Chii({
-        //     prefix: "/chii",
-        //     // port: 4321,
-        // }),
+        Chii({
+            prefix: "/chii",
+            // port: 4321,
+        }),
         VitePWA({
             // Source file: /src/sw.ts
             srcDir: "src/lib",
