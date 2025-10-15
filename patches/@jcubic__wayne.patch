@@ -1,8 +1,8 @@
 diff --git a/index.js b/index.js
-index 688b860b2be46a017fdd3972e590480ff98fe730..21e0bd41c95f4bdbd3c24406e8a8dc016b758cd6 100644
+index 701a78b270f5379b03be339d117b42b0e6473573..c4d59b1bdc47b34a72613d06fdf3b8ae770fbf8b 100644
 --- a/index.js
 +++ b/index.js
-@@ -551,7 +551,9 @@ export class Wayne {
+@@ -617,7 +617,9 @@ export class Wayne {
                      this._handle_error(resolve, req, error);
                  }
              });
@@ -13,3 +13,16 @@ index 688b860b2be46a017fdd3972e590480ff98fe730..21e0bd41c95f4bdbd3c24406e8a8dc01
          });
          ['GET', 'POST', 'DELETE', 'PATCH', 'PUT'].forEach(method => {
              this[method.toLowerCase()] = this.method(method);
+diff --git a/package.json b/package.json
+index c2e13a7f877d6e35e7e71454ccd51a65eb688057..643b02bd8efb3c73f6410c0eca16ccb83c777e50 100644
+--- a/package.json
++++ b/package.json
+@@ -3,7 +3,7 @@
+   "version": "0.19.1",
+   "description": "Service Worker Routing for in browser HTTP requests",
+   "type": "module",
+-  "main": "index.min.js",
++  "main": "index.js",
+   "scripts": {},
+   "keywords": [
+     "service-worker",
