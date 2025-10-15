@@ -40,5 +40,7 @@ export function updateIntegrationData(data) {
  * @returns {IntegrationData}
  */
 export function getIntegrationData() {
-    return (/** @type {ExtendedGlobal} */(globalThis))[__internalIntegrationDataKey] ?? {};
+    return (/** @type {ExtendedGlobal} */(globalThis))[__internalIntegrationDataKey] ?? {
+        disabled: true,
+    };
 }
