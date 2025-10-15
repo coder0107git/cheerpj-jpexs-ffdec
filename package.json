@@ -11,7 +11,7 @@
     "astro": "astro"
   },
   "dependencies": {
-    "@jcubic/wayne": "~0.18.3",
+    "@jcubic/wayne": "~0.19.1",
     "@vite-pwa/astro": "^1.0.0",
     "@zenfs/archives": "^1.1.0",
     "@zenfs/core": "^2.0.0",
