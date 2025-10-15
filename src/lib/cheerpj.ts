@@ -1,3 +1,5 @@
+type CJ3Library = any;
+
 declare global {
     /**
      * @global
@@ -67,18 +69,29 @@ declare global {
     }): Promise<void>;
 
     /**
-     * > It gives you the state of all the threads
-     * @internal
      * @global
-     * @see https://discord.com/channels/988743885121548329/1103695759779573850/1330613377843597365
+     * @see https://cheerpj.com/docs/reference/cheerpjRunMain
      */
-    function dumpAllThread(param: null): any;
+    function cheerpjRunMain(
+        className: string,
+        classPath: string,
+        ...args: string[]
+    ): Promise<number>;
 
     /**
      * @global
-     * @see https://cheerpj.com/docs/reference/cheerpOSAddStringFile
+     * @see https://cheerpj.com/docs/reference/cheerpjRunJar
      */
-    function cheerpOSAddStringFile(path: string, data: string | Uint8Array): void;
+    function cheerpjRunJar(
+        jarName: string,
+        ...args: string[]
+    ): Promise<number>;
+
+    /**
+     * @global
+     * @see https://cheerpj.com/docs/reference/cheerpjRunLibrary
+     */
+    function cheerpjRunLibrary(classPath: string): Promise<CJ3Library>;
 
     /**
      * @global
@@ -92,18 +105,45 @@ declare global {
 
     /**
      * @global
-     * @see https://cheerpj.com/docs/reference/cheerpjRunJar
+     * @see https://cheerpj.com/docs/reference/cjFileBlob
      */
-    function cheerpjRunJar(
-        jarName: string,
-        ...args: string[]
-    ): Promise<number>;
+    function cjFileBlob(path: string): Promise<Blob>;
+
+    /**
+     * @global
+     * @see https://cheerpj.com/docs/reference/cheerpOSAddStringFile
+     */
+    function cheerpOSAddStringFile(path: string, data: string | Uint8Array): void;
+
+    /**
+     * @global
+     * @see https://cheerpj.com/docs/reference/cjGetRuntimeResources
+     */
+    function cjGetRuntimeResources(): string;
+
+    /**
+     * @global
+     * @see https://cheerpj.com/docs/reference/cjGetProguardConfiguration
+     */
+    function cjGetProguardConfiguration(): void;
+
+    /**
+     * > It gives you the state of all the threads
+     * @internal
+     * @global
+     * @see https://discord.com/channels/988743885121548329/1103695759779573850/1330613377843597365
+     */
+    function dumpAllThread(param: null): any;
 }
 
 
 // import * as CheerpJ3 from "https://cjrtnc.leaningtech.com/3_20241017_546/cj3loader.js?url";
 
-export async function getCheerpJLink(version: "latest" | (string & {}) = "3_20250113_576") {
+// @ts-ignore
+// const isBrowser = import.meta.env.SSR === false;
+type AnyString = string & {};
+
+export async function getCheerpJLink(version: "latest" | AnyString = "4.2") {
     const url =
         version !== "latest"
             ? `https://cjrtnc.leaningtech.com/${version}/cj3loader.js`
@@ -113,7 +153,21 @@ export async function getCheerpJLink(version: "latest" | (string & {}) = "3_2025
     return url;
 }
 
-export default async function loadCheerpJ() {
+type CheerpJ = Pick<
+    typeof window,
+    | "cheerpjInit"
+    | "cheerpjRunMain"
+    | "cheerpjRunJar"
+    | "cheerpjRunLibrary"
+    | "cheerpjRunLibrary"
+    | "cjFileBlob"
+    | "cheerpOSAddStringFile"
+    | "cjGetRuntimeResources"
+    | "cjGetProguardConfiguration"
+    | "dumpAllThread"
+>;
+
+export default async function loadCheerpJ(): Promise<CheerpJ> {
     const cheerpjUrl: string =
         document.querySelector<HTMLTemplateElement>("[data-cheerpj-url]")
             ?.dataset
@@ -124,14 +178,30 @@ export default async function loadCheerpJ() {
     const script = document.createElement("script");
     script.src = cheerpjUrl;
 
+
     const { promise, resolve, reject } = Promise.withResolvers();
 
     script.onload = () => resolve(undefined);
     script.onerror = () => reject();
+    
 
     document.body.append(script);
 
     await promise;
+
+    // return {
+    //     cheerpjInit,
+    //     // cheerpjRunMain,
+    //     cheerpjRunJar,
+    //     cheerpjRunLibrary,
+    //     cheerpjCreateDisplay,
+    //     cjFileBlob,
+    //     cheerpOSAddStringFile,
+    //     cjGetRuntimeResources,
+    //     cjGetProguardConfiguration,
+    //     dumpAllThread
+    // };
+    return window;
 }
 
 // TODO: This was needed to mark this file as a module. Investigate if this is still needed. 
